@@ -25,6 +25,7 @@ The project combines **Python**, **HTML**, **CSS**, **JavaScript**, and **data p
 
 Project Structure
 
+```
 Student-Life-AI-Dashboard/
 │
 ├── student_life_ai_dashboard.html
@@ -40,6 +41,7 @@ Student-Life-AI-Dashboard/
 │
 ├── README.md
 └── LICENSE
+```
 
 AI Prediction Metrics
 
