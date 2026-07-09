@@ -1,0 +1,21 @@
+id,name,sem,branch,cgpa,att,backlogs,asn,study,sleep,screen,exercise,friends,hostel,stress,pressure,motivation,club,intern,proj,cert,coding,burnout,placement,backlogRisk,loneliness,productivity
+STU001,Aarav Mehta,3,Computer Science,8.2,85,0,90,5.0,7.0,4.0,4,8,1,4,5,8,2,1,3,2,8,51,100,4,16,93
+STU002,Priya Sharma,5,Computer Science,6.1,62,3,55,2.0,5.0,8.0,1,2,1,8,8,3,0,0,1,0,4,100,64,88,84,27
+STU003,Rohan Patel,7,Mechanical,7.5,78,1,75,4.0,6.5,5.0,3,5,1,5,6,6,1,2,4,3,6,88,100,32,44,71
+STU004,Sneha Gupta,2,Electronics,9.1,95,0,98,7.0,8.0,3.0,5,10,0,2,3,9,3,0,5,4,9,6,100,0,0,100
+STU005,Karan Singh,6,Computer Science,5.8,55,5,40,1.0,4.5,10.0,0,1,1,9,9,2,0,0,0,0,3,100,49,100,98,8
+STU006,Neha Joshi,4,Data Science,7.9,80,0,82,5.0,7.0,4.0,3,6,0,4,5,7,2,1,3,3,7,59,100,12,26,85
+STU007,Vikram Rao,8,Computer Science,8.7,88,0,92,6.0,7.5,3.0,5,7,1,3,4,9,3,2,3,5,9,30,100,0,12,100
+STU008,Anjali Verma,1,Civil,6.5,70,2,60,3.0,6.0,6.0,1,3,1,7,7,4,0,0,1,0,3,100,70,65,71,44
+STU009,Arjun Kumar,5,Computer Science,7.2,75,1,72,4.0,6.5,5.0,2,5,0,5,6,6,1,1,3,2,6,89,100,36,42,67
+STU010,Divya Nair,3,Data Science,8.4,87,0,88,6.0,7.5,3.0,4,9,0,3,4,8,2,0,4,3,8,31,100,0,2,100
+STU011,Rahul Tiwari,6,Mechanical,5.5,50,6,35,1.0,4.0,11.0,0,1,1,9,8,2,0,0,0,0,2,100,41,100,100,4
+STU012,Simran Kaur,4,Computer Science,8.0,82,0,85,5.0,7.0,4.0,3,7,0,4,5,7,2,1,1,3,7,57,100,10,20,86
+STU013,Harsh Agarwal,7,Electronics,6.8,68,2,65,3.0,5.5,7.0,1,2,1,7,7,4,0,1,2,1,5,100,90,64,80,42
+STU014,Pooja Reddy,2,Data Science,9.3,96,0,99,8.0,8.0,2.0,6,11,0,2,2,10,4,0,5,5,10,0,100,0,0,100
+STU015,Amit Bhatt,5,Computer Science,7.0,72,1,70,4.0,6.0,5.0,2,4,1,6,6,5,1,1,1,2,6,100,99,44,56,60
+STU016,Ishaan Desai,3,Mechanical,6.3,64,3,55,2.0,5.0,8.0,1,2,1,8,8,3,0,0,1,0,3,100,63,87,84,28
+STU017,Meera Pillai,8,Electronics,8.6,89,0,90,6.0,7.5,3.0,5,8,0,3,3,9,3,2,2,4,8,21,100,0,2,100
+STU018,Suresh Bhat,6,Civil,5.2,48,7,30,1.0,3.5,12.0,0,0,1,10,9,1,0,0,0,0,1,100,32,100,100,0
+STU019,Kritika Soni,4,Data Science,7.7,79,0,78,5.0,7.0,4.0,3,6,0,4,5,7,2,1,0,3,7,60,100,14,26,84
+STU020,Dev Malhotra,1,Computer Science,7.4,74,0,73,4.0,6.5,5.0,2,1,0,5,5,6,1,0,1,1,5,86,92,27,66,68

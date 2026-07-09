@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Life AI Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="student_life_ai_dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8.5" cy="8.5" r="6.5" stroke="#64b5f6" stroke-width="1.6"/>
+        <path d="M5.5 9l2.3 2.3L12 6" stroke="#81c995" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="brand-name">STUDENT · LIFE · AI</span>
+  </div>
+  <nav class="topbar-nav">
+    <button class="nav-btn active" onclick="showPage('dashboard', this)">Dashboard</button>
+    <button class="nav-btn" onclick="showPage('students', this)">Students</button>
+    <button class="nav-btn" onclick="showPage('form', this)">Add Student</button>
+    <button class="nav-btn" onclick="showPage('dataset', this)">Dataset</button>
+    <button class="nav-btn" onclick="showPage('model', this)">Model Info</button>
+  </nav>
+  <div class="topbar-right">
+    <div class="live-dot"></div>
+    <span>20 students · ML v2.1</span>
+  </div>
+</header>
+
+<div class="shell">
+  <main class="main">
+
+    <div id="page-dashboard" class="page active">
+      <div class="metrics-row" id="metrics-row"></div>
+
+      <div class="charts-2col">
+        <div class="card">
+          <div class="card-title">Weekly productivity trend</div>
+          <div class="card-sub">Study hours vs. productivity score over 8 weeks</div>
+          <div class="legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>Productivity %</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Study hrs (right axis)</span>
+          </div>
+          <div class="chart-wrap" style="height:190px"><canvas id="trendChart" role="img" aria-label="Weekly productivity trend line chart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Wellness radar</div>
+          <div class="card-sub">Multidimensional student profile (0–100)</div>
+          <div class="chart-wrap" style="height:220px"><canvas id="radarChart" role="img" aria-label="Radar chart showing student wellness dimensions"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-title">Risk distribution across class</div>
+        <div class="card-sub">Burnout risk score buckets — all 20 students</div>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>0–20 (Low)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#facc15"></span>20–40</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#fb923c"></span>40–60 (Med)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f87171"></span>60–80</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>80–100 (High)</span>
+        </div>
+        <div class="chart-wrap" style="height:180px"><canvas id="distChart" role="img" aria-label="Burnout risk distribution bar chart"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="row-between">
+          <div>
+            <div class="card-title">Class overview</div>
+            <div class="card-sub">All 20 students — sorted by burnout risk ↓</div>
+          </div>
+        </div>
+        <div class="tbl-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th><th>Sem</th><th>Branch</th>
+                <th>Burnout</th><th>Placement</th><th>Backlog</th><th>Loneliness</th><th>Productivity</th>
+              </tr>
+            </thead>
+            <tbody id="overview-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-form" class="page">
+      <div class="form-wrap">
+        <div class="form-header">
+          <h2>Student data intake form</h2>
+          <p>Enter student details across all 18 features to generate AI-powered predictions for burnout risk, placement score, backlog risk, loneliness score, and productivity trend.</p>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-dot" style="background:#6366f1"></div>Personal information</div>
+          <div class="field-grid">
+            <div class="field"><label>Full name</label><input type="text" id="f_name" placeholder="e.g. Priya Sharma"></div>
+            <div class="field"><label>Student ID</label><input type="text" id="f_sid" placeholder="e.g. STU021"></div>
+            <div class="field">
+              <label>Semester</label>
+              <select id="f_sem"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+            </div>
+            <div class="field">
+              <label>Branch / Major</label>
+              <select id="f_branch">
+                <option>Computer Science</option><option>Data Science</option><option>Electronics</option>
+                <option>Mechanical</option><option>Civil</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-dot" style="background:#f59e0b"></div>Academic metrics</div>
+          <div class="field-grid">
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">CGPA</span><span class="slider-num" id="v_cgpa">7.5</span></div><input type="range" min="4" max="10" step="0.1" value="7.5" oninput="sv('v_cgpa',parseFloat(this.value).toFixed(1))"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Attendance %</span><span class="slider-num" id="v_att">75</span></div><input type="range" min="30" max="100" step="1" value="75" oninput="sv('v_att',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Active backlogs</span><span class="slider-num" id="v_bl">1</span></div><input type="range" min="0" max="10" step="1" value="1" oninput="sv('v_bl',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Assignments submitted %</span><span class="slider-num" id="v_asn">80</span></div><input type="range" min="0" max="100" step="1" value="80" oninput="sv('v_asn',this.value)"></div></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-dot" style="background:#22c55e"></div>Lifestyle &amp; wellness</div>
+          <div class="field-grid">
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Daily study hours</span><span class="slider-num" id="v_study">4</span></div><input type="range" min="0" max="12" step="0.5" value="4" oninput="sv('v_study',parseFloat(this.value).toFixed(1))"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Sleep hours / night</span><span class="slider-num" id="v_sleep">6</span></div><input type="range" min="3" max="10" step="0.5" value="6" oninput="sv('v_sleep',parseFloat(this.value).toFixed(1))"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Screen time hrs / day</span><span class="slider-num" id="v_screen">5</span></div><input type="range" min="1" max="14" step="0.5" value="5" oninput="sv('v_screen',parseFloat(this.value).toFixed(1))"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Exercise days / week</span><span class="slider-num" id="v_ex">2</span></div><input type="range" min="0" max="7" step="1" value="2" oninput="sv('v_ex',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Friends / social circle</span><span class="slider-num" id="v_friends">3</span></div><input type="range" min="0" max="20" step="1" value="3" oninput="sv('v_friends',this.value)"></div></div>
+            <div class="field"><label>Living arrangement</label><select id="f_hostel"><option value="1">Hostel (away from home)</option><option value="0">Day scholar (at home)</option></select></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-dot" style="background:#ef4444"></div>Stress &amp; mental wellness</div>
+          <div class="field-grid">
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Perceived stress (1–10)</span><span class="slider-num" id="v_stress">5</span></div><input type="range" min="1" max="10" step="1" value="5" oninput="sv('v_stress',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Parental pressure (1–10)</span><span class="slider-num" id="v_pressure">5</span></div><input type="range" min="1" max="10" step="1" value="5" oninput="sv('v_pressure',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Motivation level (1–10)</span><span class="slider-num" id="v_mot">6</span></div><input type="range" min="1" max="10" step="1" value="6" oninput="sv('v_mot',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Club / activity participation</span><span class="slider-num" id="v_club">1</span></div><input type="range" min="0" max="5" step="1" value="1" oninput="sv('v_club',this.value)"></div></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-head"><div class="section-dot" style="background:#3b82f6"></div>Career readiness</div>
+          <div class="field-grid">
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Internships completed</span><span class="slider-num" id="v_intern">0</span></div><input type="range" min="0" max="5" step="1" value="0" oninput="sv('v_intern',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Projects completed</span><span class="slider-num" id="v_proj">1</span></div><input type="range" min="0" max="10" step="1" value="1" oninput="sv('v_proj',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Certifications earned</span><span class="slider-num" id="v_cert">0</span></div><input type="range" min="0" max="10" step="1" value="0" oninput="sv('v_cert',this.value)"></div></div>
+            <div class="field"><div class="slider-group"><div class="slider-top"><span class="slider-name">Coding skills (1–10)</span><span class="slider-num" id="v_code">5</span></div><input type="range" min="1" max="10" step="1" value="5" oninput="sv('v_code',this.value)"></div></div>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="runFormPrediction()">Generate predictions & save to dataset →</button>
+
+        <div class="result-box" id="form-result">
+          <div class="result-head">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#22c55e" stroke-width="1.5"/><path d="M5 8l2.3 2.3L12 5.5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Prediction results for <span id="pred-name-out" style="color:#6366f1;margin-left:3px"></span>
+          </div>
+          <div class="result-grid" id="pred-result-grid"></div>
+          <div class="advice-box" id="pred-advice"></div>
+        </div>
+        
+        <div style="margin-top: 24px; padding: 16px; background: var(--surface2); border-radius: var(--radius); display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between;">
+          <div style="font-size: 12px; color: var(--text3);">
+            <strong id="dataset-stats" style="color: var(--text);">Dataset: 20 students</strong> — All changes are saved locally
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="exportDatasetAsJSON()" style="padding: 8px 14px; border-radius: 6px; border: 0.5px solid var(--border2); background: var(--surface); color: var(--text); font-size: 12px; cursor: pointer; transition: all 0.14s; font-weight: 500;" onmouseover="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--accent'); this.style.color='#fff';" onmouseout="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--surface'); this.style.color=getComputedStyle(document.documentElement).getPropertyValue('--text');">📥 Export JSON</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-dataset" class="page">
+      <div class="row-between" style="margin-bottom:16px">
+        <div>
+          <h2 style="font-size:16px;font-weight:600">Demo dataset</h2>
+          <p style="font-size:12px;color:var(--text3);margin-top:2px">20 synthetic student records · 18 features · 5 predicted targets</p>
+        </div>
+        <button class="dl-btn" onclick="downloadCSV()">⬇ Download CSV</button>
+      </div>
+
+      <div class="ds-stats">
+        <div class="ds-stat"><div class="ds-stat-n">20</div><div class="ds-stat-l">Students</div></div>
+        <div class="ds-stat"><div class="ds-stat-n">18</div><div class="ds-stat-l">Input features</div></div>
+        <div class="ds-stat"><div class="ds-stat-n">5</div><div class="ds-stat-l">Target variables</div></div>
+        <div class="ds-stat"><div class="ds-stat-n">360</div><div class="ds-stat-l">Total data points</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-title">Feature importance heatmap</div>
+        <div class="card-sub">Estimated contribution of each feature to each prediction target</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="heatChart" role="img" aria-label="Feature importance heatmap"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="row-between">
+          <div>
+            <div class="card-title">Raw dataset with predictions</div>
+            <div class="card-sub">All 20 records — scroll horizontally on small screens</div>
+          </div>
+          <input class="search-input" type="text" placeholder="Search student..." oninput="filterDS(this.value)">
+        </div>
+        <div class="tbl-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Name</th><th>Sem</th><th>CGPA</th><th>Att%</th>
+                <th>Study h</th><th>Sleep h</th><th>Stress</th><th>Friends</th>
+                <th>Backlogs</th><th>Intern</th><th>Coding</th>
+                <th>Burnout</th><th>Placement</th><th>Backlog R.</th><th>Lonely</th><th>Productivity</th>
+              </tr>
+            </thead>
+            <tbody id="ds-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-model" class="page">
+      <div style="max-width:760px">
+        <h2 style="font-size:18px;font-weight:600;margin-bottom:6px">Model architecture &amp; feature engineering</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.65">This dashboard uses a multi-output weighted linear scoring model — interpretable, fast, and tuned on domain knowledge. Each of the 5 targets has an independently calibrated formula.</p>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Target variable formulas</div>
+          <div class="card-sub">Feature weights used to compute each score (clamped 0–100)</div>
+          <div class="chart-wrap" style="height:300px"><canvas id="modelChart" role="img" aria-label="Model feature weights bar chart"></canvas></div>
+        </div>
+
+        <div class="charts-2col">
+          <div class="card">
+            <div class="card-title">Burnout risk formula</div>
+            <div class="card-sub">Higher = more burnout</div>
+            <ul style="font-size:12.5px;color:var(--text2);line-height:2;padding-left:18px">
+              <li>Stress × 7</li><li>Parental pressure × 4</li><li>(10 – Sleep) × 3</li>
+              <li>Backlogs × 4</li><li>(100 – Attendance) × 0.3</li><li>Screen time × 1.5</li>
+              <li>(10 – Motivation) × 4</li><li>Hostel flag × 3</li>
+              <li>– Exercise × 2</li><li>– Friends × 1.5</li><li>– Study hrs × 1</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Placement score formula</div>
+            <div class="card-sub">Higher = better placement chances</div>
+            <ul style="font-size:12.5px;color:var(--text2);line-height:2;padding-left:18px">
+              <li>CGPA × 6</li><li>Coding skills × 3</li><li>Internships × 8</li>
+              <li>Projects × 3</li><li>Certifications × 2</li>
+              <li>Attendance × 0.2</li><li>Motivation × 1.5</li>
+              <li>Study hrs × 1</li><li>– Backlogs × 2</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Backlog risk formula</div>
+            <div class="card-sub">Higher = more likely to accumulate backlogs</div>
+            <ul style="font-size:12.5px;color:var(--text2);line-height:2;padding-left:18px">
+              <li>Backlogs × 8</li><li>(100 – Attendance) × 0.4</li>
+              <li>(10 – CGPA) × 4</li><li>Stress × 3</li>
+              <li>(100 – Assignments) × 0.3</li><li>(8 – Sleep) × 2</li>
+              <li>– Study hrs × 2</li><li>– Motivation × 2</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Loneliness score formula</div>
+            <div class="card-sub">Higher = more social isolation</div>
+            <ul style="font-size:12.5px;color:var(--text2);line-height:2;padding-left:18px">
+              <li>(10 – Friends) × 6</li><li>Hostel flag × 4</li>
+              <li>Stress × 2</li><li>Screen time × 1.5</li>
+              <li>(8 – Sleep) × 2</li>
+              <li>– Club participation × 4</li><li>– Exercise × 2</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">Productivity trend formula</div>
+          <div class="card-sub">Higher = more productive student week-over-week</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-top:6px">
+            <strong style="color:var(--text)">Score</strong> = (Study hrs × 5) + (Motivation × 4) + (Attendance × 0.3) – (Stress × 2) – (Screen time × 1.5) + (Exercise × 2) + (CGPA × 2)<br>
+            Weekly trend is simulated as a ±4% random walk around the base score to model real-world variation.
+          </p>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">Dataset generation methodology</div>
+          <div class="card-sub">How the synthetic records were created</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-top:4px">
+            The 20 student profiles were hand-crafted to represent a realistic distribution across academic performance tiers (high achievers, mid-range, at-risk), living situations (hostel vs day scholars), and social profiles. Features were assigned to create meaningful correlations — e.g. high stress &amp; low sleep students consistently score higher on burnout while lower on placement. Target variables are then computed deterministically from the feature formulas above, ensuring full reproducibility and explainability without any black-box components.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-students" class="page">
+      <div class="layout">
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-title">Select Student</div>
+          <p style="font-size: 13px; color: var(--text2); margin-bottom: 18px;">Choose a student to view their individual dashboard with metrics, trends, and AI-generated insights.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="student-pills"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Current Selection</div>
+          <div style="margin-top: 12px;" id="student-info-preview"></div>
+        </div>
+
+        <div id="student-report-section" style="display: none; margin-top: 24px;">
+          <div class="metrics-row" id="student-detail-metrics"></div>
+
+          <div class="charts-2col" style="margin-top: 24px;">
+            <div class="card">
+              <div class="card-title">Weekly productivity trend</div>
+              <div class="card-sub">Study hours vs. productivity score over 8 weeks</div>
+              <div class="legend">
+                <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>Productivity %</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Study hrs (right axis)</span>
+              </div>
+              <canvas id="student-detail-trendChart" style="max-height:320px"></canvas>
+            </div>
+            <div class="card">
+              <div class="card-title">Skill & wellness profile</div>
+              <div class="card-sub">Multi-dimensional assessment across 6 axes</div>
+              <canvas id="student-detail-radarChart" style="max-height:320px"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="student_data.js"></script>
+<script src="student_life_ai_dashboard.js"></script>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    loadDatasetFromStorage();
+    updateStudentCountDisplay();
+    renderPills();
+    updateStudentInfoPreview();
+    renderMetrics();
+    renderTrend();
+    renderRadar();
+    renderDist();
+    renderOverviewTable();
+  });
+</script>
+</body>
+</html>
